@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "تب جدید با تقویم و آب‌وهوا",
+  "version": "1.0.0",
+  "description": "نمایش تقویم و آب‌وهوای لار فارس در صفحه تب جدید",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.openweathermap.org/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
