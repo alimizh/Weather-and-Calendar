@@ -11,6 +11,5 @@
   ],
   "host_permissions": [
     "https://api.openweathermap.org/*"
-  ],
-
+  ]
 }
