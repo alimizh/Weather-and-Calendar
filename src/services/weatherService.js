@@ -1,4 +1,4 @@
-const API_KEY = 'YOUR_OPENWEATHERMAP_API_KEY'
+const API_KEY = 'f44563e05b7d08b6d02269031ca6cca6'
 const BASE_URL = 'https://api.openweathermap.org/data/2.5'
 const LAT = 27.6746
 const LON = 54.3429
