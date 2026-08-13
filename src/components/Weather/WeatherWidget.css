@@ -5,6 +5,140 @@
   gap: 20px;
 }
 
+.city-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.city-select {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-family);
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+}
+
+.city-select:focus {
+  border-color: var(--accent);
+  background: var(--card-bg-hover);
+}
+
+.city-select option {
+  background: var(--bg-gradient-2);
+}
+
+.city-custom-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-hover);
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.city-custom-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-style: solid;
+}
+
+.custom-city-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  animation: slide-down 0.2s ease;
+}
+
+.custom-input {
+  background: var(--bg-gradient-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: var(--font-family);
+  outline: none;
+  transition: var(--transition);
+}
+
+.custom-input:focus {
+  border-color: var(--accent);
+}
+
+.custom-input::placeholder {
+  color: var(--text-muted);
+}
+
+.custom-coords {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.custom-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.custom-submit {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.custom-submit:hover {
+  background: var(--accent-hover);
+}
+
+.custom-cancel {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.custom-cancel:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .weather-loading,
 .weather-error {
   flex: 1;

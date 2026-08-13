@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useSettings } from '../../context/SettingsContext'
+import { useSettings, CUSTOM_CITY_KEY } from '../../context/SettingsContext'
 import './SettingsModal.css'
 
 export default function SettingsModal({ onClose }) {
@@ -38,6 +38,9 @@ export default function SettingsModal({ onClose }) {
               {Object.entries(cities).map(([key, city]) => (
                 <option key={key} value={key}>{city.name}</option>
               ))}
+              <option value={CUSTOM_CITY_KEY}>
+                {settings.customCity ? settings.customCity.name : 'شهر دلخواه (از ویجت آب‌وهوا)'}
+              </option>
             </select>
           </div>
 
