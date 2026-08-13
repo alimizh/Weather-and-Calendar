@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { getCurrentWeather, getForecast } from '../services/openweatherService.js'
+import { searchCities } from '../services/geocodingService.js'
 import { config } from '../config.js'
 
 const router = Router()
@@ -11,6 +12,19 @@ function resolveLocation(req) {
   }
   return config.defaultLocation
 }
+
+router.get('/search', async (req, res, next) => {
+  try {
+    const { q, limit } = req.query
+    if (!q) {
+      return res.status(400).json({ success: false, message: 'پارامتر q (نام شهر) الزامی است' })
+    }
+    const data = await searchCities(q, Math.min(Number(limit) || 5, 10))
+    res.json({ success: true, count: data.length, data })
+  } catch (err) {
+    next(err)
+  }
+})
 
 router.get('/current', async (req, res, next) => {
   try {

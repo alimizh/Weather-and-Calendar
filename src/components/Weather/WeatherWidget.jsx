@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useWeather } from '../../hooks/useWeather'
 import { useSettings, CUSTOM_CITY_KEY } from '../../context/SettingsContext'
+import { searchCities } from '../../services/weatherService'
 import './WeatherWidget.css'
 
 function getDirection(deg) {
@@ -23,98 +24,126 @@ function getConditionIcon(icon, isDay) {
   return '🌤️'
 }
 
+function flagEmoji(countryCode) {
+  if (!countryCode) return '🌐'
+  return countryCode.toUpperCase().replace(/./g, (c) =>
+    String.fromCodePoint(127397 + c.charCodeAt(0))
+  )
+}
+
 function CitySelector() {
   const { settings, updateSettings, cities } = useSettings()
-  const [customForm, setCustomForm] = useState({ name: '', lat: '', lon: '' })
-  const [customOpen, setCustomOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState([])
+  const [searching, setSearching] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (query.trim().length < 2) {
+      setResults([])
+      setSearching(false)
+      return
+    }
+
+    setSearching(true)
+    const timer = setTimeout(async () => {
+      try {
+        const data = await searchCities(query.trim(), 6)
+        setResults(data)
+      } catch {
+        setResults([])
+      } finally {
+        setSearching(false)
+      }
+    }, 400)
+
+    return () => clearTimeout(timer)
+  }, [query])
 
   const handleCityChange = (e) => {
     updateSettings({ city: e.target.value })
   }
 
-  const handleCustomSubmit = (e) => {
-    e.preventDefault()
-    const lat = parseFloat(customForm.lat)
-    const lon = parseFloat(customForm.lon)
-    const name = customForm.name.trim() || 'موقعیت دلخواه'
-    if (Number.isNaN(lat) || Number.isNaN(lon)) return
+  const handleSelectCity = (r) => {
+    const label = [r.name, r.state, r.country].filter(Boolean).join('، ')
     updateSettings({
       city: CUSTOM_CITY_KEY,
-      customCity: { name, lat, lon }
+      customCity: { name: label, lat: r.lat, lon: r.lon }
     })
-    setCustomOpen(false)
-    setCustomForm({ name: '', lat: '', lon: '' })
+    setQuery('')
+    setResults([])
+    setSearchOpen(false)
+    inputRef.current?.blur()
   }
 
   return (
-    <>
-      <div className="city-selector">
-        <select
-          className="city-select"
-          value={settings.city}
-          onChange={handleCityChange}
-          aria-label="انتخاب شهر"
-        >
+    <div className="city-selector">
+      <div className="city-search">
+        <span className="search-icon">🔍</span>
+        <input
+          ref={inputRef}
+          type="text"
+          className="city-search-input"
+          placeholder="جستجوی شهر در سراسر جهان..."
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setSearchOpen(true)
+          }}
+          onFocus={() => setSearchOpen(true)}
+          onBlur={() => setTimeout(() => setSearchOpen(false), 200)}
+        />
+        {searching && <span className="search-spinner" />}
+      </div>
+
+      {searchOpen && query.trim().length >= 2 && (
+        <ul className="search-results">
+          {!searching && results.length === 0 && (
+            <li className="search-empty">نتیجه‌ای یافت نشد</li>
+          )}
+          {results.map((r, i) => (
+            <li key={i}>
+              <button
+                type="button"
+                className="search-result-item"
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  handleSelectCity(r)
+                }}
+              >
+                <span className="result-flag">{flagEmoji(r.country)}</span>
+                <span className="result-name">{r.name}</span>
+                <span className="result-region">
+                  {[r.state, r.country].filter(Boolean).join('، ')}
+                </span>
+                <span className="result-coords">
+                  {r.lat.toFixed(2)}, {r.lon.toFixed(2)}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <select
+        className="city-select"
+        value={settings.city}
+        onChange={handleCityChange}
+        aria-label="شهرهای پرکاربرد"
+      >
+        <optgroup label="شهرهای ایران">
           {Object.entries(cities).map(([key, c]) => (
             <option key={key} value={key}>{c.name}</option>
           ))}
-          <option value={CUSTOM_CITY_KEY}>
-            {settings.customCity ? settings.customCity.name : 'شهر دلخواه (مختصات)...'}
-          </option>
-        </select>
-        <button
-          className="city-custom-btn"
-          type="button"
-          onClick={() => setCustomOpen(o => !o)}
-          title="افزودن شهر دلخواه"
-          aria-label="افزودن شهر دلخواه"
-        >
-          +
-        </button>
-      </div>
-
-      {customOpen && (
-        <form className="custom-city-form" onSubmit={handleCustomSubmit}>
-          <input
-            className="custom-input"
-            type="text"
-            placeholder="نام شهر"
-            value={customForm.name}
-            onChange={(e) => setCustomForm(f => ({ ...f, name: e.target.value }))}
-          />
-          <div className="custom-coords">
-            <input
-              className="custom-input"
-              type="number"
-              step="any"
-              placeholder="عرض جغرافیایی (lat)"
-              value={customForm.lat}
-              onChange={(e) => setCustomForm(f => ({ ...f, lat: e.target.value }))}
-              required
-            />
-            <input
-              className="custom-input"
-              type="number"
-              step="any"
-              placeholder="طول جغرافیایی (lon)"
-              value={customForm.lon}
-              onChange={(e) => setCustomForm(f => ({ ...f, lon: e.target.value }))}
-              required
-            />
-          </div>
-          <div className="custom-actions">
-            <button className="custom-submit" type="submit">افزودن</button>
-            <button
-              className="custom-cancel"
-              type="button"
-              onClick={() => setCustomOpen(false)}
-            >
-              لغو
-            </button>
-          </div>
-        </form>
-      )}
-    </>
+        </optgroup>
+        {settings.city === CUSTOM_CITY_KEY && settings.customCity && (
+          <optgroup label="شهر انتخاب‌شده">
+            <option value={CUSTOM_CITY_KEY}>{settings.customCity.name}</option>
+          </optgroup>
+        )}
+      </select>
+    </div>
   )
 }
 
