@@ -32,13 +32,14 @@
 }
 
 html {
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'ss01', 'ss02', 'ss03', 'cv10';
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
 }
 
 body {
-  font-family: var(--font-family);
   background: var(--bg);
   color: var(--text-primary);
   overflow-x: hidden;
@@ -68,6 +69,13 @@ body {
   min-height: 100dvh;
 }
 
+h1, h2, h3, h4, h5, h6,
+p, span, a, li, label,
+button, input, select, textarea, optgroup {
+  font-family: var(--font-family);
+  font-feature-settings: 'ss01';
+}
+
 ::selection {
   background: var(--accent);
   color: white;
@@ -88,8 +96,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
-}
-
-button {
-  font-family: var(--font-family);
 }
