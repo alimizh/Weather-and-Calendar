@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useWeather } from '../../hooks/useWeather'
 import { useSettings, CUSTOM_CITY_KEY } from '../../context/SettingsContext'
 import { searchCities } from '../../services/weatherService'
+import Landmark from './Landmark'
 import './WeatherWidget.css'
 
 function getDirection(deg) {
@@ -147,7 +148,7 @@ function CitySelector() {
   )
 }
 
-export default function WeatherWidget() {
+export default function WeatherWidget({ landmark, landmarkLoading }) {
   const { settings, city } = useSettings()
   const { current, forecast, loading, error, retry } = useWeather({
     lat: city.lat,
@@ -235,6 +236,8 @@ export default function WeatherWidget() {
               ))}
             </div>
           </div>
+
+          <Landmark landmark={landmark} loading={landmarkLoading} />
 
           <div className="weather-update">آخرین به‌روزرسانی: {getTime(current.dt)}</div>
         </>

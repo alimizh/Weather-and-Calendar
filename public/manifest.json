@@ -11,6 +11,9 @@
   ],
   "host_permissions": [
     "https://api.openweathermap.org/*",
+    "https://en.wikipedia.org/*",
+    "https://*.wikipedia.org/*",
+    "https://upload.wikimedia.org/*",
     "http://localhost:3001/*",
     "http://127.0.0.1:3001/*"
   ]

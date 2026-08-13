@@ -1,0 +1,99 @@
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.bg-landmark {
+  position: absolute;
+  inset: -5%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  animation: fade-in-bg 1.2s ease forwards, kenburns 40s ease-in-out infinite alternate;
+}
+
+@keyframes fade-in-bg {
+  from { opacity: 0; }
+  to { opacity: 0.3; }
+}
+
+@keyframes kenburns {
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(1.5%, -1.5%); }
+}
+
+.bg-blobs {
+  position: absolute;
+  inset: 0;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.blob-1 {
+  width: 520px;
+  height: 520px;
+  top: -120px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(108, 92, 231, 0.55), transparent 70%);
+  animation: drift-1 22s ease-in-out infinite alternate;
+}
+
+.blob-2 {
+  width: 460px;
+  height: 460px;
+  bottom: -140px;
+  left: -80px;
+  background: radial-gradient(circle, rgba(72, 149, 239, 0.45), transparent 70%);
+  animation: drift-2 26s ease-in-out infinite alternate;
+}
+
+.blob-3 {
+  width: 380px;
+  height: 380px;
+  top: 40%;
+  left: 45%;
+  background: radial-gradient(circle, rgba(154, 108, 231, 0.35), transparent 70%);
+  animation: drift-3 30s ease-in-out infinite alternate;
+}
+
+@keyframes drift-1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-120px, 80px) scale(1.2); }
+}
+
+@keyframes drift-2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(140px, -90px) scale(1.15); }
+}
+
+@keyframes drift-3 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-80px, 60px) scale(1.25); }
+}
+
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 15, 26, 0.55) 0%,
+    rgba(15, 15, 26, 0.78) 55%,
+    rgba(11, 12, 20, 0.92) 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blob,
+  .bg-landmark {
+    animation: none;
+  }
+}
