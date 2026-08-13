@@ -38,10 +38,10 @@
   color: white;
   border: none;
   padding: 8px 20px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 13px;
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-family);
   transition: opacity 0.2s;
 }
 
@@ -58,20 +58,29 @@
 .weather-primary {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
+}
+
+.weather-icon-large {
+  font-size: 56px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 16px rgba(108, 92, 231, 0.35));
+}
+
+.weather-temp-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .weather-temp {
-  font-size: 56px;
-  font-weight: 200;
+  font-size: 48px;
+  font-weight: 300;
   color: var(--text-primary);
   line-height: 1;
 }
 
 .weather-condition {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
   font-size: 14px;
   color: var(--text-secondary);
 }
@@ -105,11 +114,16 @@
 .detail-item {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 10px 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  transition: var(--transition);
+}
+
+.detail-item:hover {
+  background: var(--card-bg-hover);
 }
 
 .detail-label {
@@ -152,7 +166,12 @@
   padding: 8px 10px;
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.forecast-item:hover {
+  background: var(--card-bg-hover);
 }
 
 .forecast-day {

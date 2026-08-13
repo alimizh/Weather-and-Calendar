@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { fetchCurrentWeather, fetchForecast } from '../services/weatherService'
 
-export function useWeather() {
+export function useWeather({ lat, lon, unit }) {
   const [current, setCurrent] = useState(null)
   const [forecast, setForecast] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -12,8 +12,8 @@ export function useWeather() {
     setError(null)
     try {
       const [curr, fore] = await Promise.all([
-        fetchCurrentWeather(),
-        fetchForecast()
+        fetchCurrentWeather(lat, lon, unit),
+        fetchForecast(lat, lon, unit)
       ])
       setCurrent(curr)
       setForecast(fore)
@@ -22,7 +22,7 @@ export function useWeather() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [lat, lon, unit])
 
   useEffect(() => { load() }, [load])
 
