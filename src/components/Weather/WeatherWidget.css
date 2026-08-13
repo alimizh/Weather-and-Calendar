@@ -13,6 +13,40 @@
   gap: 8px;
 }
 
+.city-nav-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.city-nav-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  line-height: 1;
+}
+
+.city-nav-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.city-nav-btn:active {
+  transform: scale(0.94);
+}
+
 .city-select {
   flex: 1;
   background: var(--card-bg);

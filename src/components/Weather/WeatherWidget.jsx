@@ -40,6 +40,33 @@ function CitySelector() {
   const [searchOpen, setSearchOpen] = useState(false)
   const inputRef = useRef(null)
 
+  const cityKeys = Object.keys(cities)
+
+  const navigateCity = (dir) => {
+    const idx = cityKeys.indexOf(settings.city)
+    const base = idx === -1 ? 0 : idx
+    const next = (base + dir + cityKeys.length) % cityKeys.length
+    updateSettings({ city: cityKeys[next] })
+  }
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+      const el = e.target
+      if (
+        el instanceof HTMLInputElement ||
+        el instanceof HTMLSelectElement ||
+        el instanceof HTMLTextAreaElement
+      ) {
+        return
+      }
+      e.preventDefault()
+      navigateCity(e.key === 'ArrowRight' ? -1 : 1)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  })
+
   useEffect(() => {
     if (query.trim().length < 2) {
       setResults([])
@@ -127,23 +154,45 @@ function CitySelector() {
         </ul>
       )}
 
-      <select
-        className="city-select"
-        value={settings.city}
-        onChange={handleCityChange}
-        aria-label="شهرهای پرکاربرد"
-      >
-        <optgroup label="شهرهای ایران">
-          {Object.entries(cities).map(([key, c]) => (
-            <option key={key} value={key}>{c.name}</option>
-          ))}
-        </optgroup>
-        {settings.city === CUSTOM_CITY_KEY && settings.customCity && (
-          <optgroup label="شهر انتخاب‌شده">
-            <option value={CUSTOM_CITY_KEY}>{settings.customCity.name}</option>
+      <div className="city-nav-row">
+        <button
+          type="button"
+          className="city-nav-btn"
+          aria-label="شهر بعدی"
+          title="شهر بعدی"
+          onClick={() => navigateCity(-1)}
+        >
+          ‹
+        </button>
+
+        <select
+          className="city-select"
+          value={settings.city}
+          onChange={handleCityChange}
+          aria-label="شهرهای پرکاربرد"
+        >
+          <optgroup label="شهرهای ایران">
+            {Object.entries(cities).map(([key, c]) => (
+              <option key={key} value={key}>{c.name}</option>
+            ))}
           </optgroup>
-        )}
-      </select>
+          {settings.city === CUSTOM_CITY_KEY && settings.customCity && (
+            <optgroup label="شهر انتخاب‌شده">
+              <option value={CUSTOM_CITY_KEY}>{settings.customCity.name}</option>
+            </optgroup>
+          )}
+        </select>
+
+        <button
+          type="button"
+          className="city-nav-btn"
+          aria-label="شهر قبلی"
+          title="شهر قبلی"
+          onClick={() => navigateCity(1)}
+        >
+          ›
+        </button>
+      </div>
     </div>
   )
 }
